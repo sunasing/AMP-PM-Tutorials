@@ -1,5 +1,12 @@
 # Azure Managed Prometheus - Tutorials
 
+## What is Prometheus
+
+https://prometheus.io/docs/tutorials/getting_started/
+
+<img width="439" alt="image" src="https://github.com/user-attachments/assets/5d3f0efa-adcf-42b0-85c4-72af614486cf" />
+
+
 ## Setup Prometheus on a VM
 
 1. Create a VM on the Azure portal.
@@ -37,7 +44,7 @@ scrape_configs:
 By default, Prometheus stores its database in ./data (flag --storage.tsdb.path).<br>
 ./prometheus --config.file=prometheus.yml
 
-7. Access the Prometheus server in <VM IP address>:9090
+7. Access the Prometheus server in VM-ip-address:9090
 
 8. Query Prometheus metrics (eg. *up* or *process_cpu_seconds_total*)
 
@@ -49,11 +56,11 @@ By default, Prometheus stores its database in ./data (flag --storage.tsdb.path).
 
 10. Run the node-exporter
 
-	- ./node_exporter --web.listen-address <VM ip address>:8080
+	- ./node_exporter --web.listen-address VM-ip-address:8080
 
 11. Configure prometheus (Prometheus.yml) and add the node-exporter target
 
-     - Add the target in the target section:  - targets: ['<VM ip address>:8080']
+     - Add the target in the target section:  - targets: ['VM-ip-address:8080']
    
 12. Run Prometheus again, and view the metrics from node-exporter in the Prometheus UI.
 
@@ -61,17 +68,31 @@ By default, Prometheus stores its database in ./data (flag --storage.tsdb.path).
 
 For this you can use any Kubernetes cluster. In this example, we will use an AKS cluster.
 
-	3. Install Prom Operator:
-		a. helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-		b. Helm repo update
-		c. helm install main prometheus-community/kube-prometheus-stack
-		d. Kubectl get all 
-	4. Now Prom and grafana and some default alerts are running
-	5. View grafana: Usually its port 3000 but you can check grafana pod logs to find the port.
-		a. Kubectl get pod
-		b. Kubectl logs <grafana pod name>
-		c. kubectl port-forward deployment/main-grafana 3000
-		d. Username: admin | password: prom-operator
-	6. View Prom UI: usually port 9090
-kubectl port-forward prometheus-main-kube-prometheus-stack-prometheus-0 9090![image](https://github.com/user-attachments/assets/87c63e13-28f8-47ff-8e44-dc93e05176b5)
+### Prerequisites
+
+1. kubectl installed - kubectl enables you to manage/interact with the cluster. If you don't have kubectl, don't worry, we can use the Azure Cloud Shell
+
+### Steps
+
+1. Create an AKS cluster.
+2. Connect to the AKS cluster using below commands on az cli:
+
+```
+az login
+az account set --subscription subscription-id
+az aks get-credentials --resource-group resourcegroupname --name aksclustername
+```
+3. Install Prom Operator:
+ - helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+ - helm repo update
+ - helm install main prometheus-community/kube-prometheus-stack
+ - kubectl get all 
+4. Now Prom and grafana and some default alerts are running
+5. View grafana: Usually its port 3000 but you can check grafana pod logs to find the port.
+   - Kubectl get pod
+   - Kubectl logs grafana-pod-name
+   - kubectl port-forward deployment/main-grafana 3000
+   - Username: admin | password: prom-operator
+6. View Prom UI: usually port 9090
+	- kubectl port-forward prometheus-main-kube-prometheus-stack-prometheus-0 9090
 
