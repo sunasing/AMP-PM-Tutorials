@@ -6,6 +6,9 @@ https://prometheus.io/docs/tutorials/getting_started/
 
 <img width="439" alt="image" src="https://github.com/user-attachments/assets/5d3f0efa-adcf-42b0-85c4-72af614486cf" />
 
+## Prerequisites
+
+An active Azure subscription.
 
 ## Setup Prometheus on a VM
 
@@ -70,7 +73,7 @@ For this you can use any Kubernetes cluster. In this example, we will use an AKS
 
 ### Prerequisites
 
-1. kubectl installed - kubectl enables you to manage/interact with the cluster. If you don't have kubectl, don't worry, we can use the Azure Cloud Shell
+1. az cli, kubectl, and helm installed. If you don't have these tools, don't worry, we can use the Azure Cloud Shell for the purpose of this tutorial.
 
 ### Steps
 
@@ -95,4 +98,30 @@ az aks get-credentials --resource-group resourcegroupname --name aksclustername
    - Username: admin | password: prom-operator
 6. View Prom UI: usually port 9090
 	- kubectl port-forward prometheus-main-kube-prometheus-stack-prometheus-0 9090
+
+
+## Azure Managed Prometheus
+
+- Fully managed service that provides highly available, scalable, and enterprise-grade secure service
+- Out-of-box scrape configurations, dashboards, recording rules and alerts – which can be customized
+- Integrated with Azure Managed Grafana with out-of-box dashboards, or bring your own Grafana
+- Collect metrics from exporters for 3rd party workloads and custom apps using Pod/Service Monitors
+- Data retention for 18 months
+
+<img width="460" alt="image" src="https://github.com/user-attachments/assets/68e62b29-8b06-4314-8af4-eb526c77b4bb" />
+
+
+Steps:
+1. Create an AKS cluster, while creation enable Managed Prometheus: [Documentation link](https://learn.microsoft.com/en-us/azure/azure-monitor/containers/kubernetes-monitoring-enable?tabs=cli)
+2. Navigate to Azure Managed Grafana instance and view the dashboards, query metrics.
+3. Create a recording rule or Prometheus Alert. [Documentation link](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/prometheus-rule-groups)
+4. Customize data collection. [Documentation link](https://learn.microsoft.com/en-us/azure/azure-monitor/containers/prometheus-metrics-scrape-configuration?tabs=CRDConfig%2CCRDScrapeConfig%2CConfigFileScrapeConfigBasicAuth%2CConfigFileScrapeConfigTLSAuth)
+
+## Next in the learning series
+
+1. Collect metrics from 3rd party workloads using 3rd party Prometheus exporters.
+2. Collect custom applicaiton metrics using Prom sdk
+
+
+
 
