@@ -5,7 +5,7 @@
 1. Create a VM on the Azure portal.
 2. Connect to the VM (you can either use SSH or remote-desktop).
 3. Install Prometheus server: https://prometheus.io/docs/prometheus/latest/getting_started/, https://prometheus.io/download/
-      - wget https://github.com/prometheus/prometheus/releases/download/v3.1.0/prometheus-3.1.0.darwin-amd64.tar.gz
+      - wget https://github.com/prometheus/prometheus/releases/download/v3.1.0/prometheus-3.1.0.linux-amd64.tar.gz
       - tar xvfz prometheus-*.tar.gz
       - cd prometheus-*
 4. Locate the Prometheus config (prometheus.yml)
@@ -34,11 +34,28 @@ scrape_configs:
 ```
 
 6. Start Prometheus
-By default, Prometheus stores its database in ./data (flag --storage.tsdb.path).
+By default, Prometheus stores its database in ./data (flag --storage.tsdb.path).<br>
 ./prometheus --config.file=prometheus.yml
 
-7. Install Prometheus node-exporter
+7. Access the Prometheus server in <VM IP address>:9090
 
+8. Query Prometheus metrics (eg. *up* or *process_cpu_seconds_total*)
+
+9. Install Prometheus node-exporter to add endpoints for Prometheus server to scrape.
+
+      - wget https://github.com/prometheus/node_exporter/releases/download/v1.8.2/node_exporter-1.8.2.linux-amd64.tar.gz
+      - tar xvfz node_exporter-1.8.2.linux-amd64.tar.gz
+      - cd node-exporter*
+
+10. Run the node-exporter
+
+	- ./node_exporter --web.listen-address <VM ip address>:8080
+
+11. Configure prometheus (Prometheus.yml) and add the node-exporter target
+
+     - Add the target in the target section:  - targets: ['<VM ip address>:8080']
+   
+12. Run Prometheus again, and view the metrics from node-exporter in the Prometheus UI.
 
 ## Setup Prometheus on a Kubernetes cluster
 
